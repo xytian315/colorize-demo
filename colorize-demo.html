@@ -1,0 +1,180 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+An element providing a simple demo to colorize items.
+
+Example:
+
+    <colorize-demo></colorize-demo>
+
+@demo
+-->
+<dom-module id="colorize-demo">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+
+    .button {
+      width: 120px;
+      height: 50px;
+      margin: 10px 20px;
+      cursor: pointer;
+      border: 1px solid rgba(0, 0, 0, 0.5);
+      font: 15px Arial;
+      border-radius: 4px;
+      color: #FFF;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .button:hover {
+      opacity: 0.8;
+    }
+
+    .active {
+      border: 3px solid #fff;
+    }
+
+    #colorize {
+      background: #FF686B;
+    }
+
+    #red {
+      background-color: #dd1e2f;
+    }
+
+    #yellow {
+      background-color: #ebb035;
+    }
+
+    #blue {
+      background-color: #3f9ac1;
+    }
+
+    .item {
+      list-style: none;
+      display: inline-block;
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin: 10px;
+      padding: 30px;
+      background: #FFF;
+      float: left;
+      color: white;
+      font-size: 30px;
+    }
+  </style>
+
+  <template>
+    <div class="control">
+      <button class='button' id='colorize' on-click='colorize' >Colorize </button>
+      <button class='button' id='clear' on-click= 'clear'>Clear</button>
+      <button class='button change' id='red' on-click='change'>Red</button>
+      <button class='button change' id='yellow' on-click='change'>Yellow </button>
+      <button class='button change' id='blue' on-click='change'>Blue </button>
+    </div>
+    <ul class='panel'>
+      <li class='item'></li>
+      <li class='item'></li>
+      <li class='item'></li>
+      <li class='item'></li>
+      <li class='item'></li>
+      <li class='item'></li>
+      <li class='item'></li>
+      <li class='item'></li>
+      <li class='item'></li>
+      <li class='item'></li>
+    </ul>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'colorize-demo',
+
+    properties: {
+
+      /**
+      * the default color
+      *
+      **/
+
+      defaultColor:{
+        type: String,
+        value: '#fff'
+      },
+
+      /**
+      * all the items in the panel 
+      *
+      **/
+
+      items: {
+        type: String,
+        readOnly: true
+      }
+
+    },
+
+    /**
+     * Take all items to set the random color
+     *
+     */
+    colorize: function() {
+      var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+      var items = document.getElementsByClassName('item');
+      for (var i = 0; i < items.length; i++) {
+        items[i].style.backgroundColor = randomColor;
+        items[i].innerHTML = randomColor;
+      }
+    },
+
+    /**
+     * get all the items and set all to blank
+     *
+     */
+
+    clear: function() {
+      var items = document.getElementsByClassName('item');
+      for (var i = 0; i < items.length; i++) {
+        items[i].style.backgroundColor = '#fff';
+      }
+    },
+
+    /**
+    * Change the selected item to the previous pressed button color(red, yellow, blue)
+    *
+    */
+
+    change: function(e) {
+      var color = e.target.id;
+      var activeItem = document.querySelector('.active');
+      if (activeItem) {
+          activeItem.classList.remove('active');
+        }
+      e.target.classList.add("active");
+
+      var items = document.getElementsByClassName('item');
+      for (var i = 0; i < items.length; i++) {
+        items[i].addEventListener("click", function(event) {
+          this.style.backgroundColor = color;
+          this.innerHTML = "";
+        }, false);
+      }
+
+    }
+
+
+  });
+
+
+
+</script>
+
