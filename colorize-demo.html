@@ -154,7 +154,7 @@ Example:
     */
 
     change: function(e) {
-      var color = e.target.id;
+      var color = getComputedStyle(e.target).backgroundColor;
       var activeItem = document.querySelector('.active');
       if (activeItem) {
           activeItem.classList.remove('active');
