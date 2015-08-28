@@ -1,0 +1,28 @@
+{
+  "name": "colorize-demo",
+  "version": "1.0.0",
+  "authors": [
+    "Kristy Tian<xytian315@gmail.com>"
+  ],
+  "description": "colorize-demo",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer"
+  ],
+  "main": "colorize-demo.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/xytian315/colorize-demo/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

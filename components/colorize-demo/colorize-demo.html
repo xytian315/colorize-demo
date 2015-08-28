@@ -1,0 +1,201 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+An element providing a simple demo to colorize items.
+
+Example:
+
+    <colorize-demo></colorize-demo>
+
+@demo
+-->
+<dom-module id="colorize-demo">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+
+    .button {
+      width: 120px;
+      height: 50px;
+      margin: 5px 5px;
+      cursor: pointer;
+      border: 1px solid rgba(0, 0, 0, 0.5);
+      font: 15px Arial;
+      border-radius: 4px;
+      color: #FFF;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .button:hover {
+      opacity: 0.8;
+    }
+
+    #colorize {
+      background: #FF686B;
+    }
+
+    .item {
+      list-style: none;
+      display: inline-block;
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin: 10px;
+      padding: 30px;
+      background: #D3D3D3;
+      float: left;
+      color: white;
+      font-size: 30px;
+    }
+  </style>
+
+  <template>
+    <label for="countInput">How many items do you want to set up?</label>
+    <input type="range"  min="1" max="30" value ="{{count::input}}" />
+    <p> You have selected <span>{{count}}</span> items</p>
+    <label for="customColorInput">What color do you want to custom?</label>
+    <input id="customColorInput" type="text" value="{{customColor::input}}"/>
+    <p>Your custom color is <span>{{customColor}}</span>!</p>
+    <div id="control">
+      <button class='button' id='colorize' on-click='colorize'>Colorize </button>
+      <button class='button' id='clear' on-click= 'clear'>Clear</button>
+      <button class='button' id= 'change' on-click='change'>Custom</button>
+    </div>
+    <div id='panel'>
+    </div>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'colorize-demo',
+
+    properties: {
+
+      /**
+      * the cleared color,
+      * after press the clear button 
+      * it will set all the items to this default color
+      **/
+
+      clearColor: {
+        type: String,
+        value: '#fff'
+      },
+      /**
+      * the custom color
+      * after press the custom button
+      * it will set all the items to this custom color
+      **/
+
+      customColor: {
+        type: String,
+        notify: true,
+        value: '#3f9ac1'
+      },
+
+      /**
+      * the number of the items you want to set
+      **/
+
+      count: {
+        type: Number,
+        value: 10,
+        observer: 'countChanged'
+      }
+    },
+
+    /**
+    *
+    **/
+
+    ready: function () {
+      var changeButton = document.getElementById('change');
+      changeButton.style.backgroundColor = this.customColor;
+
+      document.getElementById('customColorInput').addEventListener('change', function(event) {
+      changeButton.style.backgroundColor = event.target.value;
+    });
+  
+   },
+
+    /**
+     * Change the number of the items
+     */
+
+    countChanged: function(newValue) {
+      document.getElementById('panel').innerHTML='';
+      var ul = document.createElement("ul");
+      for (var i = 0; i< newValue; i++){
+        var li = document.createElement('li');
+        li.className += " item sytle-scope colorize-demo";
+        ul.appendChild(li);
+      }
+      document.getElementById('panel').appendChild(ul);
+    },
+
+
+    /**
+     * Take all the items and set them to the random color
+     *
+     */
+    colorize: function() {
+      var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+      var items = document.getElementsByClassName('item');
+      for (var i = 0; i < items.length; i++) {
+        items[i].style.backgroundColor = randomColor;
+        items[i].innerHTML = randomColor;
+      }
+    },
+
+    /**
+     * Take all the items and set them to the cleared color
+     *
+     */
+
+    clear: function() {
+      var items = document.getElementsByClassName('item');
+      for (var i = 0; i < items.length; i++) {
+        items[i].style.backgroundColor = this.clearColor;
+      }
+    },
+
+    /**
+    * Take all the items and set them to the custom color
+    *
+    */
+
+    change: function(e) {
+      var color = getComputedStyle(e.target).backgroundColor;
+      var items = document.getElementsByClassName('item');
+      for (var i = 0; i < items.length; i++) {
+        items[i].style.backgroundColor = color;
+        items[i].innerHTML = rgb2hex(color);
+      }
+
+      /**
+      * change color text from rgb to hex
+      */
+      function rgb2hex(rgb) {
+        rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+
+        function hex(x) {
+          return ("0" + parseInt(x).toString(16)).slice(-2);
+        }
+        return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+      }
+    }
+
+
+  });
+
+
+</script>
+
