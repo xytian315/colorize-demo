@@ -46,7 +46,7 @@ Example:
       height: 150px;
       margin: 10px;
       padding: 30px;
-      background: #FFF;
+      background: #D3D3D3;
       float: left;
       color: white;
       font-size: 30px;
@@ -54,29 +54,19 @@ Example:
   </style>
 
   <template>
+    <label for="countInput">How many items do you want to set up?</label>
+    <input type="range"  min="1" max="30" value ="{{count::input}}" />
+    <p> You have selected <span>{{count}}</span> items</p>
     <label for="customColorInput">What color do you want to custom?</label>
     <input id="customColorInput" type="text" value="{{customColor::input}}"/>
     <p>Your custom color is <span>{{customColor}}</span>!</p>
-    <div class="control">
+    <div id="control">
       <button class='button' id='colorize' on-click='colorize'>Colorize </button>
       <button class='button' id='clear' on-click= 'clear'>Clear</button>
       <button class='button' id= 'change' on-click='change'>Custom</button>
     </div>
-    <ul class='panel'>
-      <li class='item'></li>
-      <li class='item'></li>
-      <li class='item'></li>
-      <li class='item'></li>
-      <li class='item'></li>
-      <li class='item'></li>
-      <li class='item'></li>
-      <li class='item'></li>
-      <li class='item'></li>
-      <li class='item'></li>
-      <template repeat="{{item in items}}">
-        <li>{{item}}</li>
-      </template>
-    </ul>
+    <div id='panel'>
+    </div>
   </template>
 
 </dom-module>
@@ -109,22 +99,51 @@ Example:
         type: String,
         notify: true,
         value: '#3f9ac1'
+      },
+
+      /**
+      * the number of the items you want to set
+      **/
+
+      count: {
+        type: Number,
+        value: 10,
+        observer: 'countChanged'
       }
     },
+
+    /**
+    *
+    **/
 
     ready: function () {
       var changeButton = document.getElementById('change');
       changeButton.style.backgroundColor = this.customColor;
 
-      document.querySelector('input').addEventListener('change', function(event) {
+      document.getElementById('customColorInput').addEventListener('change', function(event) {
       changeButton.style.backgroundColor = event.target.value;
     });
   
    },
 
+    /**
+     * Change the number of the items
+     */
+
+    countChanged: function(newValue) {
+      document.getElementById('panel').innerHTML='';
+      var ul = document.createElement("ul");
+      for (var i = 0; i< newValue; i++){
+        var li = document.createElement('li');
+        li.className += " item sytle-scope colorize-demo";
+        ul.appendChild(li);
+      }
+      document.getElementById('panel').appendChild(ul);
+    },
+
 
     /**
-     * Take all items to set the random color
+     * Take all the items and set them to the random color
      *
      */
     colorize: function() {
@@ -137,7 +156,7 @@ Example:
     },
 
     /**
-     * get all the items and set all to cleared color
+     * Take all the items and set them to the cleared color
      *
      */
 
@@ -149,7 +168,7 @@ Example:
     },
 
     /**
-    * Change the items to the custom color
+    * Take all the items and set them to the custom color
     *
     */
 
@@ -176,7 +195,6 @@ Example:
 
 
   });
-
 
 
 </script>
