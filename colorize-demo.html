@@ -20,7 +20,7 @@ Example:
     .button {
       width: 120px;
       height: 50px;
-      margin: 10px 20px;
+      margin: 5px 5px;
       cursor: pointer;
       border: 1px solid rgba(0, 0, 0, 0.5);
       font: 15px Arial;
@@ -34,24 +34,8 @@ Example:
       opacity: 0.8;
     }
 
-    .active {
-      border: 3px solid #fff;
-    }
-
     #colorize {
       background: #FF686B;
-    }
-
-    #red {
-      background-color: #dd1e2f;
-    }
-
-    #yellow {
-      background-color: #ebb035;
-    }
-
-    #blue {
-      background-color: #3f9ac1;
     }
 
     .item {
@@ -70,12 +54,13 @@ Example:
   </style>
 
   <template>
+    <label for="customColorInput">What color do you want to custom?</label>
+    <input id="customColorInput" type="text" value="{{customColor::input}}"/>
+    <p>Your custom color is <span>{{customColor}}</span>!</p>
     <div class="control">
-      <button class='button' id='colorize' on-click='colorize' >Colorize </button>
+      <button class='button' id='colorize' on-click='colorize'>Colorize </button>
       <button class='button' id='clear' on-click= 'clear'>Clear</button>
-      <button class='button change' id='red' on-click='change'>Red</button>
-      <button class='button change' id='yellow' on-click='change'>Yellow </button>
-      <button class='button change' id='blue' on-click='change'>Blue </button>
+      <button class='button' id= 'change' on-click='change'>Custom</button>
     </div>
     <ul class='panel'>
       <li class='item'></li>
@@ -88,6 +73,9 @@ Example:
       <li class='item'></li>
       <li class='item'></li>
       <li class='item'></li>
+      <template repeat="{{item in items}}">
+        <li>{{item}}</li>
+      </template>
     </ul>
   </template>
 
@@ -102,27 +90,38 @@ Example:
     properties: {
 
       /**
-      * the default color,
+      * the cleared color,
       * after press the clear button 
       * it will set all the items to this default color
       **/
 
-      defaultColor: {
+      clearColor: {
         type: String,
         value: '#fff'
       },
-
       /**
-      * all the items in the panel 
-      *
+      * the custom color
+      * after press the custom button
+      * it will set all the items to this custom color
       **/
 
-      items: {
+      customColor: {
         type: String,
-        readOnly: true
+        notify: true,
+        value: '#3f9ac1'
       }
-
     },
+
+    ready: function () {
+      var changeButton = document.getElementById('change');
+      changeButton.style.backgroundColor = this.customColor;
+
+      document.querySelector('input').addEventListener('change', function(event) {
+      changeButton.style.backgroundColor = event.target.value;
+    });
+  
+   },
+
 
     /**
      * Take all items to set the random color
@@ -138,37 +137,30 @@ Example:
     },
 
     /**
-     * get all the items and set all to blank
+     * get all the items and set all to cleared color
      *
      */
 
     clear: function() {
       var items = document.getElementsByClassName('item');
       for (var i = 0; i < items.length; i++) {
-        items[i].style.backgroundColor = this.defaultColor;
+        items[i].style.backgroundColor = this.clearColor;
       }
     },
 
     /**
-    * Change the selected item to the previous pressed button color(red, yellow, blue)
+    * Change the items to the custom color
     *
     */
 
     change: function(e) {
       var color = getComputedStyle(e.target).backgroundColor;
-      var activeItem = document.querySelector('.active');
-      if (activeItem) {
-          activeItem.classList.remove('active');
-        }
-      e.target.classList.add("active");
-
       var items = document.getElementsByClassName('item');
       for (var i = 0; i < items.length; i++) {
-        items[i].addEventListener("click", function(event) {
-          this.style.backgroundColor = color;
-          this.innerHTML = rgb2hex(color);
-        }, false);
+        items[i].style.backgroundColor = color;
+        items[i].innerHTML = rgb2hex(color);
       }
+
       /**
       * change color text from rgb to hex
       */

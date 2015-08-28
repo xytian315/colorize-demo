@@ -17,21 +17,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <link rel="import" href="../colorize-demo.html">
     <style>
     body {
-      background: #282A2B;
       text-align: center;
     }
     </style>
   </head>
   <body>
-    <colorize-demo author='{"name": "Lord Meowser", "image": "http://placekitten.com/g/200/300"}' fancy>
-      <h2>Hello colorize-demo</h2>
+    <colorize-demo clear-color="#ffffff">
     </colorize-demo>
-
     <script>
-      document.querySelector('button').addEventListener('click', function() {
-        alert(document.querySelector('colorize-demo').sayHello('Hallo!'));
-      });
     </script>
-
   </body>
 </html>
