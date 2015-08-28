@@ -2,6 +2,9 @@
 
 An element providing a starting point for your own reusable Polymer elements.
 
+## Documentation
+
+[http://xytian315.github.io/colorize-demo/components/colorize-demo/](http://xytian315.github.io/colorize-demo/components/colorize-demo/)
 
 ## Dependencies
 
